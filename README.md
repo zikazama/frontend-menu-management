@@ -2,6 +2,10 @@
 
 A responsive Next.js 14 application for managing hierarchical menu structures with multi-tree support, Redux state management, and Tailwind CSS.
 
+## Live Demo
+
+🔗 **Live URL**: [https://frontend-menu-management.vercel.app/](https://frontend-menu-management.vercel.app/)
+
 ## Features
 
 ### Core Features

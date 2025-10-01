@@ -83,8 +83,8 @@ export default function MenusPage() {
     dispatch(selectNode(node.id as number));
   };
 
-  const handleToggleExpand = (nodeId: number) => {
-    dispatch(toggleExpand(nodeId));
+  const handleToggleExpand = (nodeId: string | number) => {
+    dispatch(toggleExpand(nodeId as number));
   };
 
   const handleNameChange = (value: string) => {
