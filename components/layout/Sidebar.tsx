@@ -9,8 +9,6 @@ import {
   FileText,
   Users,
   Trophy,
-  ChevronLeft,
-  ChevronRight,
   X,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -24,13 +22,13 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { id: 'systems', label: 'Systems', icon: <Settings size={20} />, href: '/systems' },
-  { id: 'system-code', label: 'System Code', icon: <Code size={20} />, href: '/system-code' },
-  { id: 'properties', label: 'Properties', icon: <Building2 size={20} />, href: '/properties' },
-  { id: 'menus', label: 'Menus', icon: <MenuIcon size={20} />, href: '/menus' },
-  { id: 'api-list', label: 'API List', icon: <FileText size={20} />, href: '/api-list' },
-  { id: 'users-group', label: 'Users & Group', icon: <Users size={20} />, href: '/users-group' },
-  { id: 'competition', label: 'Competition', icon: <Trophy size={20} />, href: '/competition' },
+  { id: 'systems', label: 'Systems', icon: <Settings size={16} />, href: '/systems' },
+  { id: 'system-code', label: 'System Code', icon: <Code size={16} />, href: '/system-code' },
+  { id: 'properties', label: 'Properties', icon: <Building2 size={16} />, href: '/properties' },
+  { id: 'menus', label: 'Menus', icon: <MenuIcon size={16} />, href: '/menus' },
+  { id: 'api-list', label: 'API List', icon: <FileText size={16} />, href: '/api-list' },
+  { id: 'users-group', label: 'Users & Group', icon: <Users size={16} />, href: '/users-group' },
+  { id: 'competition', label: 'Competition', icon: <Trophy size={16} />, href: '/competition' },
 ];
 
 interface SidebarProps {
@@ -39,7 +37,6 @@ interface SidebarProps {
 }
 
 export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
   const pathname = usePathname();
 
   // Close mobile drawer on route change
@@ -47,7 +44,7 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
     if (onClose) {
       onClose();
     }
-  }, [pathname]);
+  }, [pathname, onClose]);
 
   // Prevent body scroll when mobile drawer is open
   useEffect(() => {
@@ -64,9 +61,11 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
   return (
     <>
       {/* Mobile Overlay */}
-      {onClose && isOpen && (
+      {onClose && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity duration-200"
+          className={`fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity duration-300 ${
+            isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          }`}
           onClick={onClose}
           aria-hidden="true"
         />
@@ -74,79 +73,101 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
 
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-0 h-screen bg-white border-r border-gray-200 flex flex-col z-50 transition-all duration-200
-          ${onClose ? 'lg:translate-x-0' : ''}
-          ${onClose && !isOpen ? '-translate-x-full lg:translate-x-0' : 'translate-x-0'}
-          ${isCollapsed ? 'w-16 lg:w-16' : 'w-64 lg:w-60'}
+        style={{
+          background: '#1a2332',
+        }}
+        className={`fixed left-0 top-0 bottom-0 w-[232px] flex flex-col z-50 transition-transform duration-300 ease-in-out
+          ${onClose ? (isOpen ? 'translate-x-0' : '-translate-x-full') : 'translate-x-0'}
+          lg:translate-x-0 lg:rounded-tr-3xl
         `}
       >
-        {/* Brand/Logo */}
-        <div className="h-16 flex items-center justify-between px-4 border-b border-gray-200">
-          {!isCollapsed && (
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">SM</span>
-              </div>
-              <span className="font-semibold text-gray-900">System</span>
+        {/* Header/Logo Row */}
+        <div className="h-[72px] flex items-center justify-between px-5">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center"
+              style={{ background: 'var(--accent)' }}>
+              <span style={{ color: 'var(--accent-fg)' }} className="font-bold text-sm">C</span>
             </div>
-          )}
-
-          <div className="flex items-center gap-2">
-            {/* Desktop collapse button */}
-            <button
-              onClick={() => setIsCollapsed(!isCollapsed)}
-              className="hidden lg:flex p-1.5 rounded-lg hover:bg-gray-100 transition-colors min-w-[44px] min-h-[44px] items-center justify-center"
-              aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            >
-              {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
-            </button>
-
-            {/* Mobile close button */}
-            {onClose && (
-              <button
-                onClick={onClose}
-                className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
-                aria-label="Close menu"
-              >
-                <X size={24} />
-              </button>
-            )}
+            <span style={{ color: '#ffffff' }} className="font-semibold text-base">CLOIT</span>
           </div>
+
+          {/* Mobile close button / Hamburger */}
+          {onClose ? (
+            <button
+              onClick={onClose}
+              className="lg:hidden p-2 rounded-lg transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+              style={{ color: 'var(--sidebar-ico)' }}
+              aria-label="Close menu"
+            >
+              <X size={24} />
+            </button>
+          ) : (
+            <button
+              className="p-2 rounded-lg transition-colors hover:bg-white/5"
+              style={{ color: '#ffffff' }}
+              aria-label="Menu"
+            >
+              <MenuIcon size={20} />
+            </button>
+          )}
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 px-2 py-4 overflow-y-auto">
-          <ul className="space-y-1">
+        <nav className="flex-1 overflow-y-auto px-4 py-2">
+          <div className="space-y-0">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
+              const isSystemsItem = item.id === 'systems';
+              const isUsersGroup = item.id === 'users-group';
+
               return (
-                <li key={item.id}>
-                  <Link
-                    href={item.href}
-                    className={`flex items-center gap-3 px-3 py-3 lg:py-2.5 rounded-lg transition-all relative group min-h-[44px] ${
-                      isActive
-                        ? 'bg-green-50 text-green-700'
-                        : 'text-gray-700 hover:bg-gray-50 active:bg-gray-100'
-                    }`}
-                    title={isCollapsed ? item.label : undefined}
-                  >
-                    {/* Active indicator bar */}
-                    {isActive && (
-                      <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-green-600 rounded-r-full" />
-                    )}
-
-                    <span className={`flex-shrink-0 ${isCollapsed ? 'mx-auto' : ''}`}>
-                      {item.icon}
-                    </span>
-
-                    {!isCollapsed && (
-                      <span className="text-sm font-medium">{item.label}</span>
-                    )}
-                  </Link>
-                </li>
+                <div key={item.id} className={isUsersGroup ? 'mt-4' : ''}>
+                  {isActive ? (
+                    <Link
+                      href={item.href}
+                      className="flex items-center h-[44px] px-4 gap-3 rounded-[22px] transition-colors font-bold text-sm touch-manipulation"
+                      style={{
+                        background: '#8fdc3c',
+                        color: '#000000',
+                      }}
+                    >
+                      <span className="flex-shrink-0 w-4 h-4 flex items-center justify-center">
+                        {item.icon}
+                      </span>
+                      <span>{item.label}</span>
+                    </Link>
+                  ) : isSystemsItem ? (
+                    <Link
+                      href={item.href}
+                      className="flex items-center h-[44px] px-4 gap-3 rounded-lg transition-colors font-normal text-sm hover:bg-white/5 touch-manipulation ml-[20px]"
+                      style={{
+                        background: '#252f3e',
+                        color: 'rgba(255, 255, 255, 0.9)'
+                      }}
+                    >
+                      <span className="flex-shrink-0 w-4 h-4 flex items-center justify-center">
+                        {item.icon}
+                      </span>
+                      <span>{item.label}</span>
+                    </Link>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      className="flex items-center h-[44px] px-4 gap-3 rounded-lg transition-colors font-normal text-sm hover:bg-white/5 touch-manipulation ml-[20px]"
+                      style={{
+                        color: 'rgba(255, 255, 255, 0.6)'
+                      }}
+                    >
+                      <span className="flex-shrink-0 w-4 h-4 flex items-center justify-center">
+                        {item.icon}
+                      </span>
+                      <span>{item.label}</span>
+                    </Link>
+                  )}
+                </div>
               );
             })}
-          </ul>
+          </div>
         </nav>
       </aside>
     </>

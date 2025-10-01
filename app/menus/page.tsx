@@ -374,7 +374,7 @@ export default function MenusPage() {
                         <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700">
                           {editingNode.parentId ? (
                             (() => {
-                              const findParent = (nodes: typeof menuNodes, parentId: number): string => {
+                              const findParent = (nodes: typeof menuNodes, parentId: number): string | null => {
                                 for (const node of nodes) {
                                   if (node.id === parentId) return node.name;
                                   if (node.children) {
@@ -382,9 +382,9 @@ export default function MenusPage() {
                                     if (found) return found;
                                   }
                                 }
-                                return `ID: ${parentId}`;
+                                return null;
                               };
-                              return findParent(menuNodes, editingNode.parentId);
+                              return findParent(menuNodes, editingNode.parentId) || 'Unknown';
                             })()
                           ) : (
                             'None (Root)'
